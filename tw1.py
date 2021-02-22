@@ -1,11 +1,10 @@
 import tweepy
 import slackweb
-import time, schedule
+import datetime
 import key
 
 slack_url=key.slack_url
 slack = slackweb.Slack(url=slack_url)
-
 
 #Twitter API
 #各キーを取得
@@ -13,6 +12,12 @@ consumer_key        = key.consumer_key
 consumer_secret     = key.consumer_secret
 access_token        = key.access_token
 access_token_secret = key.access_token_secret
+
+dt_now = datetime.datetime.now(
+    datetime.timezone(datetime.timedelta(hours=9))
+)
+day_before_yesterday='%d-%d-%d'%(dt_now.year, dt_now.month, dt_now.day-2)
+
 
 def authTwitter():
     #認証情報を設定 
@@ -25,7 +30,7 @@ def authTwitter():
 
 def printTweetBySearch(s):
     api = authTwitter() # 認証
-
+    print('Search for %s'%(s))
     tweets = tweepy.Cursor(api.search, q =s,\
                             include_entities = True, \
                             tweet_mode = 'extended', \
@@ -59,16 +64,9 @@ def printTweetBySearch(s):
     print("%s tweets have been posted!" %(N_of_tweet))
 
 def main():
-    #printTweetBySearch('#あてなよる from:Alley05769089 exclude:retweets')
-    #printTweetBySearch('イベスト from:Rbis_12 exclude:retweets')
-    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets')
+    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweet since:%s'%(day_before_yesterday))
 
-#schedule.every().day.at("21:17").do(main)   
 
 if __name__ == "__main__":
     main()
-    """
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-    """
+
