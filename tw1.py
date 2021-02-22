@@ -59,7 +59,16 @@ def printTweetBySearch(s):
     print("%s tweets have been posted!" %(N_of_tweet))
 
 def main():
-    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets')  
+    #printTweetBySearch('#あてなよる from:Alley05769089 exclude:retweets')
+    #printTweetBySearch('イベスト from:Rbis_12 exclude:retweets')
+    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets')
+
+#schedule.every().day.at("21:17").do(main)   
 
 if __name__ == "__main__":
     main()
+    """
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+    """
