@@ -18,6 +18,10 @@ dt_now = datetime.datetime.now(
 )
 day_before_yesterday='%d-%d-%d'%(dt_now.year, dt_now.month, dt_now.day-2)
 
+def convert_to_jst(dt):
+    dtjst =dt + datetime.timedelta(hours=9)
+    return(dtjst)
+
 
 def authTwitter():
     #認証情報を設定 
@@ -43,7 +47,7 @@ def printTweetBySearch(s):
         print('＝＝＝＝＝＝＝＝＝＝')
         print('user_name : ',tweet.user.name)
         print('user_id : ',tweet.user.screen_name)
-        print('date : ', tweet.created_at)
+        print('date : ', convert_to_jst(tweet.created_at))
         print(tweet.full_text)
         print('favo : ', tweet.favorite_count)
         print('retw : ', tweet.retweet_count)
@@ -56,7 +60,7 @@ def printTweetBySearch(s):
                               "user_id : %s \n" \
                               "date : %s \n" \
                               "%s" \
-                              %(tweet.user.name, tweet.user.screen_name, tweet.created_at, tweet.full_text),
+                              %(tweet.user.name, tweet.user.screen_name, convert_to_jst(tweet.created_at), tweet.full_text),
                       "mrkdwn_in": ["text", "pretext"]}
         attachments.append(attachment)
         slack.notify(attachments=attachments)
@@ -64,7 +68,7 @@ def printTweetBySearch(s):
     print("%s tweets have been posted!" %(N_of_tweet))
 
 def main():
-    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweet since:%s'%(day_before_yesterday))
+    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets since:%s'%(day_before_yesterday))
 
 
 if __name__ == "__main__":
