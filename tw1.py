@@ -2,6 +2,7 @@ import tweepy
 import slackweb
 import datetime
 import key
+import line_notify
 
 slack_url=key.slack_url
 slack = slackweb.Slack(url=slack_url)
@@ -41,6 +42,7 @@ def printTweetBySearch(s):
                             result_type = 'recent', \
                             lang = 'ja').items(10)
     N_of_tweet = 0
+    slack.notify(text="Search for %s" %(s))
     for tweet in tweets:
         N_of_tweet += 1
         #if tweet.favorite_count + tweet.retweet_count >= 100:
@@ -53,8 +55,7 @@ def printTweetBySearch(s):
         print('retw : ', tweet.retweet_count)
 
         attachments = []
-        attachment = {"title": "Searched for '%s'." %(s),
-                      "pretext": "Tweet notification #%d" %(N_of_tweet),
+        attachment = {"pretext": "Tweet notification #%d" %(N_of_tweet),
                       "text": "＝＝＝＝＝＝＝＝＝＝＝＝ \n" \
                               "user_name : %s \n" \
                               "user_id : %s \n" \
@@ -66,6 +67,13 @@ def printTweetBySearch(s):
         slack.notify(attachments=attachments)
     slack.notify(text="%s tweets have been posted!" %(N_of_tweet))
     print("%s tweets have been posted!" %(N_of_tweet))
+    if N_of_tweet > 0:
+        line_notify.send_line_notify("%s tweets have been posted! \n" \
+                                     "(Searched for %s) \n" \
+                                     "\n" \
+                                     "Let's check slack notification!!" \
+                                     %(N_of_tweet, s))
+
 
 def main():
     printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets since:%s'%(day_before_yesterday))
