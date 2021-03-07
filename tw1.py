@@ -14,10 +14,13 @@ consumer_secret     = key.consumer_secret
 access_token        = key.access_token
 access_token_secret = key.access_token_secret
 
-dt_now = datetime.datetime.now(
-    datetime.timezone(datetime.timedelta(hours=9))
-)
-day_before_yesterday='%d-%d-%d'%(dt_now.year, dt_now.month, dt_now.day-2)
+def dt_since():
+    dt_now = datetime.datetime.now(
+        datetime.timezone(datetime.timedelta(hours=9))
+    )
+    day_before_yesterday=dt_now-datetime.timedelta(days=2)
+    day_before_yesterday_str=day_before_yesterday.strftime('%Y-%m-%d')
+    return(day_before_yesterday_str)
 
 def convert_to_jst(dt):
     dtjst =dt + datetime.timedelta(hours=9)
@@ -76,7 +79,7 @@ def printTweetBySearch(s):
 
 
 def main():
-    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets since:%s'%(day_before_yesterday))
+    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets since:%s'%(dt_since()))
 
 
 if __name__ == "__main__":
