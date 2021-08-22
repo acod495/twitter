@@ -79,7 +79,8 @@ def printTweetBySearch(s):
 
 
 def main():
-    printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets since:%s'%(dt_since()))
+    printTweetBySearch('#大原千鶴 from:nhk_ryouri exclude:retweets since:%s'%(dt_since()))
+    #printTweetBySearch('#あてなよる from:NHK_PR exclude:retweets since:%s'%(dt_since()))
 
 
 if __name__ == "__main__":
